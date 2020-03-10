@@ -1,0 +1,212 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultHref"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Opportunity Detail</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="edit()" color='primary'>
+        <ion-icon slot="icon-only" name="create"></ion-icon>
+      </ion-button>
+      <ion-button (click)="remove()" color='danger'>
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="opportunity" class="ion-padding">
+
+    <div class="slds-path">
+      <div class="slds-grid slds-path__track slds-has-overflow">
+        <div class="slds-grid slds-path__scroller-container">
+          <div class="slds-path__scroller" role="application">
+            <div class="slds-path__scroller_inner" (touchstart)='startDrag($event)' (touchmove)='drag($event)' (touchend)='stopDrag($event)'>
+              <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal" id='myStages'
+                overflow-scroll="true">
+                <li *ngFor='let stage of stages' [class]="stage.status" role="presentation"
+                  (click)='changeStage(stage)'>
+                  <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" role="option"
+                    tabindex="-1">
+                    <span class="slds-path__stage">
+                      <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                      </svg>
+                      <span class="slds-assistive-text">{{stage.value}}</span>
+                    </span>
+                    <span class="slds-path__title">{{stage.value}}</span>
+                  </a>
+                </li>
+              </ul>
+              <div class="slds-path__scroll-controls">
+                <button class="slds-button slds-button_icon slds-button_icon-border-filled" title="Scroll left"
+                  tabindex="-1" (click)='stagesScrollLeft()'>
+                  <svg class="slds-button__icon" aria-hidden="true">
+                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#left"></use>
+                  </svg>
+                  <span class="slds-assistive-text">Scroll left</span>
+                </button>
+                <button class="slds-button slds-button_icon slds-button_icon-border-filled" title="Scroll right"
+                  tabindex="-1" (click)='stagesScrollRight()'>
+                  <svg class="slds-button__icon" aria-hidden="true">
+                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#right"></use>
+                  </svg>
+                  <span class="slds-assistive-text">Scroll right</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class='ion-padding'><b>Stage: {{selectedStage}}</b></p>
+    <button style='width: 100%' class="slds-button slds-button_brand" (click)='markAsCurrentStage()' *ngIf='selectedStage && opportunity && opportunity.StageName !== selectedStage &&  !(selectedStage === "Closed" || selectedStage === "Closed Won" || selectedStage === "Closed Lost")'>
+      Mark as Current Stage
+    </button>
+    <button style='width: 100%' class="slds-button slds-button_brand" (click)='markStageAsComplete()' *ngIf='selectedStage && opportunity && opportunity.StageName === selectedStage && !(selectedStage === "Closed" || selectedStage === "Closed Won" || selectedStage === "Closed Lost") && !(opportunity.StageName === "Closed Won" || opportunity.StageName === "Closed Lost")'>
+      <svg class="slds-button__icon" aria-hidden="true">
+        <use xlink:href="/assets/icons/action-sprite/svg/symbols.svg#check"></use>
+      </svg>
+      &nbsp;Mark Stage as Complete
+    </button>
+    <button style='width: 100%' class="slds-button slds-button_brand" (click)='selectClosedStage()' *ngIf='selectedStage && opportunity && !(opportunity.StageName === "Closed Won" || opportunity.StageName === "Closed Lost") && (selectedStage === "Closed" || selectedStage === "Closed Won" || selectedStage === "Closed Lost")'>
+      Select Closed Stage
+    </button>
+    <button style='width: 100%' class="slds-button slds-button_brand" (click)='changeClosedStage()' *ngIf='selectedStage && opportunity && (opportunity.StageName === "Closed Won" || opportunity.StageName === "Closed Lost") && (selectedStage === "Closed" || selectedStage === "Closed Won" || selectedStage === "Closed Lost")'>
+      Change Closed Stage
+    </button> 
+    <div class="slds-form" role="list" style="padding-top: 10px;">
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">
+              <abbr class="slds-required" title="required">* </abbr>Opportunity Name</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                <span class="slds-avatar slds-avatar_x-small slds-avatar_circle slds-m-right_xx-small">
+                  <img alt="Jack Rogers" src="/assets/images/avatar1.jpg" title="Jack Rogers" />
+                </span>
+                {{opportunity.Name}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Stage</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{opportunity.StageName}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem" *ngIf='opportunity.Account'>
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Account</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{opportunity.Account.Name}}
+              </div>  
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Type</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{opportunity.Type}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Amount</span>
+            <div class="slds-form-element__icon">
+              <button class="slds-button slds-button_icon">
+                <svg class="slds-button__icon" aria-hidden="true">
+                  <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#info"></use>
+                </svg>
+                <span class="slds-assistive-text">Help</span>
+              </button>
+            </div>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{opportunity.Amount | currency:"VND":"symbol":'1.0-2'}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Close Date</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{ opportunity.CloseDate | date }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Expected Revenue</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{opportunity.ExpectedRevenue | currency:"VND":"symbol":'1.0-2'}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Lead Source</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{opportunity.LeadSource}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Probability</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{opportunity.Probability}}%
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Description</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{opportunity.Description}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

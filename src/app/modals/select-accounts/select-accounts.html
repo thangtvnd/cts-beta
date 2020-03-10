@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()" color='primary'>
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Select Account</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="queryText" placeholder="Search"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list #scheduleList *ngIf='!loading'>
+    <ion-item *ngFor="let account of accounts" (click)='select(account)'>
+      <ion-label>
+        <h3><strong>{{account.Name}}</strong></h3>
+        <p>
+          {{ account.CreatedDate | date }}
+        </p>
+      </ion-label>
+
+    </ion-item>
+  </ion-list>
+
+  <ion-list-header [hidden]="loading || accounts && accounts.length">
+    No Account Found
+  </ion-list-header>
+</ion-content>

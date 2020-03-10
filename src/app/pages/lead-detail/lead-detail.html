@@ -1,0 +1,185 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultHref"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Lead Detail</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="edit()" color='primary'>
+        <ion-icon slot="icon-only" name="create"></ion-icon>
+      </ion-button>
+      <ion-button (click)="remove()" color='danger'>
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="lead" class="ion-padding">
+
+    <div class="slds-path">
+      <div class="slds-grid slds-path__track slds-has-overflow">
+        <div class="slds-grid slds-path__scroller-container">
+          <div class="slds-path__scroller" role="application">
+            <div class="slds-path__scroller_inner" (touchstart)='startDrag($event)' (touchmove)='drag($event)' (touchend)='stopDrag($event)'>
+              <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal" id='myLeadStages'
+                overflow-scroll="true">
+                <li *ngFor='let stage of stages' [class]="stage.status" role="presentation"
+                  (click)='changeStage(stage)'>
+                  <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" role="option"
+                    tabindex="-1">
+                    <span class="slds-path__stage">
+                      <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                      </svg>
+                      <span class="slds-assistive-text">{{stage.value}}</span>
+                    </span>
+                    <span class="slds-path__title">{{stage.value}}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class='ion-padding'><b>Stage: {{selectedStage}}</b></p>
+    <button style='width: 100%' class="slds-button slds-button_brand" (click)='markAsCurrentStage()' *ngIf='selectedStage && lead && lead.Status !== selectedStage && selectedStage !== "Qualified"'>
+      Mark as Current Stage
+    </button>
+    <button style='width: 100%' class="slds-button slds-button_brand" (click)='markStageAsComplete()' *ngIf='selectedStage && lead && lead.Status === selectedStage && lead.Status !== "Qualified"'>
+      <svg class="slds-button__icon" aria-hidden="true">
+        <use xlink:href="/assets/icons/action-sprite/svg/symbols.svg#check"></use>
+      </svg>
+      &nbsp;Mark Stage as Complete
+    </button>
+    <button style='width: 100%' class="slds-button slds-button_brand" (click)='selectConvertedStatus()' *ngIf='selectedStage && lead && selectedStage === "Qualified" && lead.Status !== "Qualified"'>
+      Select Converted Status
+    </button>
+    <div class="slds-form" role="list" style="padding-top: 10px;">
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">
+              Lead Name</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                <span class="slds-avatar slds-avatar_x-small slds-avatar_circle slds-m-right_xx-small">
+                  <img alt="Jack Rogers" src="/assets/images/avatar1.jpg" title="Jack Rogers" />
+                </span>
+                {{lead.Name}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem" *ngIf='lead.Email'>
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Title</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{lead.Title}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Status</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{lead.Status}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Phone</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                <a href="tel:{{lead.Phone}}">{{lead.Phone}}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Email</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                <a href="mailto:{{lead.Email}}">{{lead.Email}}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Company</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{lead.Company}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem" *ngIf='lead.Company'>
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Industry</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{lead.Industry}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">No. of Employees</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{lead.NumberOfEmployees}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Lead Source</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{lead.LeadSource}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+            <span class="slds-form-element__label">Description</span>
+            <div class="slds-form-element__control">
+              <div class="slds-form-element__static">
+                {{lead.Description}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

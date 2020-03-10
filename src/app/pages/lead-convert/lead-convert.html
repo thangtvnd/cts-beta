@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()" color='primary'>
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Lead Convert</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()" color='primary'>
+        <ion-icon slot="icon-only" name="save"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="lead" class="ion-padding">
+    <div class="slds-form" role="list" style="ion-padding">
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_stacked slds-is-editing slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
+            <label class="slds-form-element__label" for="ConvertedStatus">
+              <abbr class="slds-required" title="required">* </abbr>Converted Status</label>
+            <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+              <select id="select-type" class="slds-select" name="ConvertedStatus" [(ngModel)]='convertedStatus'>
+                <option *ngFor='let stage of convertedStages' [value]="stage.value">{{stage.label}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="Account">
+              <abbr class="slds-required" title="required">* </abbr>Account</label>
+            <div class="slds-form-element__control">
+              <ion-buttons>
+                <ion-chip (click)='selectAccount()'>
+                  <ion-label *ngIf='selectedAccount'>{{selectedAccount.Name}}</ion-label>
+                  <ion-label *ngIf='!selectedAccount'>Select Account</ion-label>
+                </ion-chip>
+                <ion-button (click)="clearAccount()" size='small' fill='clear' *ngIf='selectedAccount'>
+                  <ion-icon slot="icon-only" name="close"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="OpportunityName">
+              Opportunity Name</label>
+            <div class="slds-form-element__control">
+              <input type="text" required="" name="OpportunityName" class="slds-input" [(ngModel)]='opportunityName' />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

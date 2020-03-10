@@ -1,0 +1,170 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultHref"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Lead Edit</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()" color='primary'>
+        <ion-icon slot="icon-only" name="save"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="lead" class="ion-padding">
+    <div class="slds-form" role="list" style="ion-padding">
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="LastName">
+              <abbr class="slds-required" title="required">* </abbr>Last Name</label>
+            <div class="slds-form-element__control">
+              <input type="text" required="" name="LastName" class="slds-input" [(ngModel)]='lead.LastName' />
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="FirstName">First Name</label>
+            <div class="slds-form-element__control">
+              <input type="text" required="" name="FirstName" class="slds-input" [(ngModel)]='lead.FirstName' />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="Company">
+              <abbr class="slds-required" title="required">* </abbr>Company</label>
+            <div class="slds-form-element__control">
+              <input type="text" required="" name="Company" class="slds-input" [(ngModel)]='lead.Company' />
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="Title">Title</label>
+            <div class="slds-form-element__control">
+              <input type="text" name="Title" class="slds-input" [(ngModel)]='lead.Title' />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="Email">Email</label>
+            <div class="slds-form-element__control">
+              <input type="email" name="Email" class="slds-input" [(ngModel)]='lead.Email' />
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="Phone">Phone</label>
+            <div class="slds-form-element__control">
+              <input type="tel" name="Phone" class="slds-input" [(ngModel)]='lead.Phone' />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="NumberOfEmployees">No. of Employees</label>
+            <div class="slds-form-element__control">
+              <input type="number" name="NumberOfEmployees" class="slds-input" [(ngModel)]='lead.NumberOfEmployees' />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_stacked slds-is-editing slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
+            <label class="slds-form-element__label" for="LeadSource">Lead Source</label>
+            <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+              <select *ngIf='pickListValues && pickListValues["LeadSource"]' id="select-type" class="slds-select" name="LeadSource" [(ngModel)]='lead.LeadSource'>
+                <option value="">Please select</option>
+                <option *ngFor='let option of pickListValues["LeadSource"]' [value]="option.value">{{option.label}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_stacked slds-is-editing slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
+            <label class="slds-form-element__label" for="Industry">Industry</label>
+            <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+              <select id="select-type" class="slds-select" name="Industry" [(ngModel)]='lead.Industry'>
+                <option value="">Please select</option>
+                <option *ngFor='let option of pickListValues["Industry"]' [value]="option.value">{{option.label}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="AnnualRevenue">Annual Revenue</label>
+            <div class="slds-form-element__control">
+              <input type="text" name="AnnualRevenue" class="slds-input" [(ngModel)]='lead.AnnualRevenue' />
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_stacked slds-is-editing slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
+            <label class="slds-form-element__label" for="Rating">Rating</label>
+            <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+              <select id="select-type" class="slds-select" name="Rating" [(ngModel)]='lead.Rating'>
+                <option value="">Please select</option>
+                <option *ngFor='let option of pickListValues["Rating"]' [value]="option.value">{{option.label}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="Street">Street</label>
+            <div class="slds-form-element__control">
+              <input type="text" name="Street" class="slds-input" [(ngModel)]='lead.Street' />
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="State">State</label>
+            <div class="slds-form-element__control">
+              <input type="text" name="State" class="slds-input" [(ngModel)]='lead.State' />
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="City">City</label>
+            <div class="slds-form-element__control">
+              <input type="text" name="City" class="slds-input" [(ngModel)]='lead.City' />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="Description">Description</label>
+            <div class="slds-form-element__control">
+              <textarea rows=5 name="Description" class="slds-input" [(ngModel)]='lead.Description'></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()" color='primary'>
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Close This Opportunity</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeOpportunity()" color='primary'>
+        <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div *ngIf="opportunity" class="ion-padding">
+    <div class="slds-form" role="list" class='ion-padding'>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_stacked slds-is-editing slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
+            <label class="slds-form-element__label" for="Stage">
+              <abbr class="slds-required" title="required">* </abbr>Stage</label>
+            <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+              <select id="select-type" class="slds-select" name="Stage" [(ngModel)]='selectedStage'>
+                <option value="">Please select</option>
+                <option value="Closed Won">Closed Won</option>
+                <option value="Closed Lost">Closed Lost</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ion-content>

@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Leads</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="queryText" placeholder="Search"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list #scheduleList *ngIf='!loading'>
+    <ion-item *ngFor="let lead of leads"
+      routerLink="/app/tabs/leads/lead/{{lead.Id}}">
+      <ion-label>
+        <h3><strong>{{lead.Name}}</strong></h3>
+        <h4 *ngIf='lead.Company'>Company: {{lead.Company}}</h4>
+        <h4 *ngIf='lead.Status'>Status: {{lead.Status}}</h4>
+        <h4 *ngIf='lead.Email'>Email: {{lead.Email}}</h4>
+        <h4 *ngIf='lead.Phone'>Phone: {{lead.Phone}}</h4>
+        <h4 *ngIf='lead.Address'>Address: {{lead.Address}}</h4>
+        <p>
+          {{ lead.CreatedDate | date }}
+        </p>
+      </ion-label>
+
+    </ion-item>
+  </ion-list>
+
+  <ion-list-header [hidden]="loading || leads && leads.length">
+    No Lead Found
+  </ion-list-header>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" #fab (click)='add()'>
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

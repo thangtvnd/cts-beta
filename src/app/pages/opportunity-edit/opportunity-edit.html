@@ -1,0 +1,130 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultHref"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Opportunity Detail</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()" color='primary'>
+        <ion-icon slot="icon-only" name="save"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="opportunity" class="ion-padding">
+    <div class="slds-form" role="list" class='ion-padding'>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="Name">
+              <abbr class="slds-required" title="required">* </abbr>Opportunity Name</label>
+            <div class="slds-form-element__control">
+              <input type="text" required="" name="Name" class="slds-input" [(ngModel)]='opportunity.Name' />
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="Amount">
+              <abbr class="slds-required" title="required">* </abbr>Amount</label>
+            <div class="slds-form-element__control">
+              <input type="number" name="Amount" required="" class="slds-input" [(ngModel)]='opportunity.Amount' />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="Expected_Profit__c">
+              Account</label>
+            <div class="slds-form-element__control">
+              <ion-buttons>
+                <ion-chip (click)='selectAccount()'>
+                  <ion-label *ngIf='selectedAccount'>{{selectedAccount.Name}}</ion-label>
+                  <ion-label *ngIf='!selectedAccount'>Select Account</ion-label>
+                </ion-chip>
+                <ion-button (click)="clearAccount()" size='small' fill='clear' *ngIf='selectedAccount'>
+                  <ion-icon slot="icon-only" name="close"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="CloseDate">
+              <abbr class="slds-required" title="required">* </abbr>Close Date</label>
+            <div class="slds-form-element__control">
+              <ngl-datepicker-input style="width: 100%" [(ngModel)]="opportunity.CloseDate" #dt="ngModel"
+                [showToday]="showToday">
+              </ngl-datepicker-input>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="Expected_Profit__c">
+              <abbr class="slds-required" title="required">* </abbr>Expected Profit</label>
+            <div class="slds-form-element__control">
+              <input type="number" name="Expected_Profit__c" required="" class="slds-input"
+                [(ngModel)]='opportunity.Expected_Profit__c' />
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_stacked slds-is-editing slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
+            <label class="slds-form-element__label" for="Type">
+              Type</label>
+            <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+              <select *ngIf='pickListValues && pickListValues["Type"]' id="select-type" class="slds-select" name="Type" [(ngModel)]='opportunity.Type'>
+                <option value="">Please select</option>
+                <option *ngFor='let option of pickListValues["Type"]' [value]="option.value">{{option.label}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div
+            class="slds-form-element slds-form-element_stacked slds-is-editing slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
+            <label class="slds-form-element__label" for="StageName">
+              <abbr class="slds-required" title="required">* </abbr>Stage Name</label>
+            <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+              <select *ngIf='pickListValues && pickListValues["StageName"]' id="select-type" class="slds-select" name="StageName" [(ngModel)]='opportunity.StageName'>
+                <option value="">Please select</option>
+                <option *ngFor='let option of pickListValues["StageName"]' [value]="option.value">{{option.label}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+            <label class="slds-form-element__label" for="NextStep">Next Step</label>
+            <div class="slds-form-element__control">
+              <input type="text" name="NextStep" id="NextStep" class="slds-input" [(ngModel)]='opportunity.NextStep' />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-form__row">
+        <div class="slds-form__item" role="listitem">
+          <div class="slds-form-element slds-form-element_stacked slds-is-editing slds-form-element_1-col">
+            <label class="slds-form-element__label" for="Description">Description</label>
+            <div class="slds-form-element__control">
+              <textarea id="Description" name="Description" class="slds-textarea" placeholder="Enter Description"
+                [(ngModel)]='opportunity.Description'>
+                      </textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

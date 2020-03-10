@@ -1,0 +1,8 @@
+{
+  "name": "cts-sales",
+  "type": "angular",
+  "integrations": {
+    "cordova": {},
+    "capacitor": {}
+  }
+}

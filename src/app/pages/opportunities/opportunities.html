@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Opportunities</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="queryText" placeholder="Search"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list #scheduleList *ngIf='!loading'>
+    <ion-item *ngFor="let opportunity of opportunities"
+      routerLink="/app/tabs/opportunities/opportunity/{{opportunity.Id}}">
+      <ion-label>
+        <h3><strong>{{opportunity.Name}}</strong></h3>
+        <h4>
+          <ion-text *ngIf='opportunity.Amount' color='primary'>{{opportunity.Amount | currency:"VND":"symbol":'1.0-2'}}<br></ion-text>
+          <span *ngIf='opportunity.Account'>Account: {{opportunity.Account.Name}}<br></span>
+          <span>Stage: {{opportunity.StageName}}</span><br>
+        </h4>
+        <p>
+          {{ opportunity.CreatedDate | date }}
+        </p>
+      </ion-label>
+
+    </ion-item>
+  </ion-list>
+
+  <ion-list-header [hidden]="loading || opportunities && opportunities.length">
+    No Opportunities Found
+  </ion-list-header>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" #fab (click)='add()'>
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
